@@ -21,6 +21,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/assets/sass/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -42,7 +43,10 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    // https://www.npmjs.com/package/@nuxtjs/i18n
+    '@nuxtjs/i18n'
+    // https://github.com/nuxt-community/i18n-module
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -53,6 +57,10 @@ export default {
 
   // vuetifyカスタマイズ
   vuetify: {
+    // カスタムCSSの有効化
+    // https://vuetifyjs.com/ja/features/sass-variables/#nuxt-3067306e30a430f330b930c830fc30eb
+    customVariables: ['~/assets/sass/variables.scss'],
+    treeShake: true,
     theme: {
       themes: {
         light: {
@@ -66,7 +74,19 @@ export default {
       }
     }
   },
-
+  i18n: {
+    locales: ['ja', 'en'],
+    defaultLocale: 'ja',
+    // Doc: https://kazupon.github.io/vue-i18n/api/#properties
+    vueI18n: {
+      fallbackLocale: 'ja',
+      silentFallbackWarn: true,
+      messages: {
+        ja: require('./locales/ja.json'),
+        en: require('./locales/en.json')
+      }
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     // build高速化のため

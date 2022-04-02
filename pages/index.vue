@@ -1,88 +1,49 @@
 <template>
-  <!-- v-container: ビューポートの最大幅のブレークポイントを削除 -->
-  <v-container fluid>
-    <!-- v-card
-    flat: カードのElevationを削除
-    tile: コンポーネントの border-radius を削除 -->
-    <v-card
-      flat
-      tile
-      color="transparent"
-    >
-      <v-card-title>
-        Usersテーブルの取得
-      </v-card-title>
-      <v-card-text>
-        <!-- dense:; 密なテーブルをレンダリングするためにpaddingを減らす -->
-        <v-simple-table dense>
-          <template
-            v-if="users.length"
-          >
-            <thead>
-              <tr>
-                <th
-                  v-for="(key, i) in userKeys"
-                  :key="`key-${i}`"
-                >
-                  {{ key }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(user, i) in users"
-                :key="`user-${i}`"
-              >
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ dateFormat(user.created_at) }}</td>
-              </tr>
-            </tbody>
-          </template>
-          <template v-else>
-            ユーザーが存在しません
-          </template>
-        </v-simple-table>
-      </v-card-text>
-      <v-card-title>
-        カラーリスト
-      </v-card-title>
-      <v-card-text>
-        <v-btn
-          v-for="(color, i) in colors"
-          :key="`color-${i}`"
-          :color="color"
-          class="mr-2"
+  <v-app>
+    <home-app-bar />
+    <v-sheet>
+      <v-container
+        fluid
+        :style="{ maxWidth: '1280px' }"
+      >
+        <v-row
+          v-for="(menu, i) in menus"
+          :key="`menu-${i}`"
         >
-          {{ color }}
-        </v-btn>
-      </v-card-text>
-    </v-card>
-  </v-container>
+          <v-col cols="12">
+            <div :is="`home-${menu.title}`"></div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-sheet>
+    <app-footer />
+  </v-app>
 </template>
 
 <script>
+import HomeAbout from '~/components/Home/HomeAbout'
+import HomeProducts from '~/components/Home/HomeProducts'
+import HomePrice from '~/components/Home/HomePrice'
+import HomeContact from '~/components/Home/HomeContact'
+import HomeCompany from '~/components/Home/HomeCompany'
+
 export default {
-  async asyncData ({ $axios }) {
-    let users = []
-    await $axios.$get('/api/v1/users').then(res => (users = res))
-    const userKeys = Object.keys(users[0] || {})
-    return { users, userKeys }
+  components: {
+    HomeAbout,
+    HomeProducts,
+    HomePrice,
+    HomeContact,
+    HomeCompany
   },
   data () {
     return {
-      colors: ['primary', 'info', 'success', 'warning', 'error', 'background']
-    }
-  },
-  computed: {
-    dateFormat () {
-      return (date) => {
-        const dateTimeFormat = new Intl.DateTimeFormat(
-          'ja', { dateStyle: 'medium', timeStyle: 'short' }
-        )
-        return dateTimeFormat.format(new Date(date))
-      }
+      menus: [
+        { title: 'about', subtitle: 'デモアプリです。' },
+        { title: 'products', subtitle: '数々の機能' },
+        { title: 'price', subtitle: '企業成長に合わせた3つのプラン' },
+        { title: 'contact', subtitle: 'ご連絡くださいまし' },
+        { title: 'company', subtitle: '会社' }
+      ]
     }
   }
 }
