@@ -1,136 +1,49 @@
 <template>
-  <!-- v-container: ビューポートの最大幅のブレークポイントを削除 -->
-  <v-container fluid>
-    <!-- v-card
-    flat: カードのElevationを削除
-    tile: コンポーネントの border-radius を削除 -->
-    <v-card
-      flat
-      tile
-      color="transparent"
-    >
-      <v-card-title>
-        Usersテーブルの取得
-      </v-card-title>
-      <v-card-text>
-        <!-- dense:; 密なテーブルをレンダリングするためにpaddingを減らす -->
-        <v-simple-table dense>
-          <template
-            v-if="users.length"
-          >
-            <thead>
-              <tr>
-                <th
-                  v-for="(key, i) in userKeys"
-                  :key="`key-${i}`"
-                >
-                  {{ key }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(user, i) in users"
-                :key="`user-${i}`"
-              >
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ dateFormat(user.created_at) }}</td>
-              </tr>
-            </tbody>
-          </template>
-          <template v-else>
-            ユーザーが存在しません
-          </template>
-        </v-simple-table>
-      </v-card-text>
-      <v-card-title>
-        カラーリスト
-      </v-card-title>
-      <v-card-text>
-        <v-btn
-          v-for="(color, i) in colors"
-          :key="`color-${i}`"
-          :color="color"
-          class="mr-2"
+  <v-app>
+    <home-app-bar />
+    <v-sheet>
+      <v-container
+        fluid
+        :style="{ maxWidth: '1280px' }"
+      >
+        <v-row
+          v-for="(menu, i) in menus"
+          :key="`menu-${i}`"
         >
-          {{ color }}
-        </v-btn>
-      </v-card-text>
-      <v-card-title>
-        VuetifyカスタムCSSの検証
-      </v-card-title>
-      <v-card-text>
-        ipad（768px）とmobile（426px）で表示・非表示
-      </v-card-text>
-      <v-card-text>
-        <v-card
-          v-for="(cls, i) in customClass"
-          :key="`cls-${i}`"
-          :color="cls.color"
-          :class="cls.name"
-        >
-          <v-card-text>
-            {{ cls.des }}
-          </v-card-text>
-        </v-card>
-      </v-card-text>
-      <v-card-title>
-        @nuxt/i18nのお試し
-      </v-card-title>
-      <v-card-text>
-        <v-simple-table dense>
-          <template>
-            <thead>
-              <tr>
-                <th>en</th>
-                <th>ja</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(path, i) in ['signup', 'login']"
-                :key="`path-${i}`"
-              >
-                <td>{{ path }}</td>
-                <td>{{ $t(`title.${path}`) }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-card-text>
-    </v-card>
-  </v-container>
+          <v-col cols="12">
+            <div :is="`home-${menu.title}`"></div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-sheet>
+    <app-footer />
+  </v-app>
 </template>
 
 <script>
+import HomeAbout from '~/components/Home/HomeAbout'
+import HomeProducts from '~/components/Home/HomeProducts'
+import HomePrice from '~/components/Home/HomePrice'
+import HomeContact from '~/components/Home/HomeContact'
+import HomeCompany from '~/components/Home/HomeCompany'
+
 export default {
-  async asyncData ({ $axios }) {
-    let users = []
-    await $axios.$get('/api/v1/users').then(res => (users = res))
-    const userKeys = Object.keys(users[0] || {})
-    return { users, userKeys }
+  components: {
+    HomeAbout,
+    HomeProducts,
+    HomePrice,
+    HomeContact,
+    HomeCompany
   },
   data () {
     return {
-      colors: ['primary', 'info', 'success', 'warning', 'error', 'background'],
-      customClass: [
-        { name: 'hidden-ipad-and-down', color: 'error', des: 'ipad未満で隠す' },
-        { name: 'hidden-ipad-and-up', color: 'info', des: 'ipad以上で隠す' },
-        { name: 'hidden-mobile-and-down', color: 'success', des: 'mobile未満で隠す' },
-        { name: 'hidden-mobile-and-up', color: 'warning', des: 'mobile以上で隠す' }
+      menus: [
+        { title: 'about', subtitle: 'デモアプリです。' },
+        { title: 'products', subtitle: '数々の機能' },
+        { title: 'price', subtitle: '企業成長に合わせた3つのプラン' },
+        { title: 'contact', subtitle: 'ご連絡くださいまし' },
+        { title: 'company', subtitle: '会社' }
       ]
-    }
-  },
-  computed: {
-    dateFormat () {
-      return (date) => {
-        const dateTimeFormat = new Intl.DateTimeFormat(
-          'ja', { dateStyle: 'medium', timeStyle: 'short' }
-        )
-        return dateTimeFormat.format(new Date(date))
-      }
     }
   }
 }
