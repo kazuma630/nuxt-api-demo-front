@@ -49,6 +49,10 @@ export default {
     // https://github.com/nuxt-community/i18n-module
   ],
 
+  publicRuntimeConfig: {
+    appName: process.env.APP_NAME
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
