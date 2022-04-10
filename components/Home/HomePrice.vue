@@ -73,7 +73,7 @@ export default {
     ]
     return {
       payments,
-      payment: payments[1].label,
+      payment: payments[0].label,
       plans: [
         {
           name: 'Only',
