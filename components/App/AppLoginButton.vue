@@ -5,7 +5,7 @@
     color="black"
     to="/login"
   >
-    {{ $t('pages.login')}}
+    {{ $t('pages.login') }}
   </v-btn>
 </template>
 

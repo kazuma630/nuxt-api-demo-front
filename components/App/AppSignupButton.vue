@@ -5,7 +5,7 @@
     color="appblue"
     to="/signup"
   >
-    {{ $t('pages.signup')}}
+    {{ $t('pages.signup') }}
   </v-btn>
 </template>
 
